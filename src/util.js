@@ -36,10 +36,10 @@ function validate(object, data, cb) {
       : '';
 
     value.email
-    && objValue
-    && !objValue.match(
-      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    )
+      && objValue
+      && !objValue.match(
+        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      )
       ? (error = `Invalid ${key}`)
       : '';
 
@@ -52,5 +52,31 @@ function validate(object, data, cb) {
     }
   }
 }
+
+export function methodError(req, res, next) {
+  const error = new Error('Ooops this method is not allowed ');
+  error.status = 405;
+  next(error);
+}
+
+export function serverError(error, req, res, next) {
+  res.status(error.status || 500).send({ status: error.status || 500, error: error.message });
+  next();
+}
+
+export const Res = async (res, resFn) => {
+  try {
+    await resFn()
+  } catch (error) {
+    if (error.message.match('required')) {
+      console.log();
+      return res.status(400).send({ status: 400, message: error.message.split('Path ')[1]?.replaceAll('`','') })
+    }
+    if (error.code === 11000) {
+      return res.status(409).send({ status: 409, message: `${Object.keys(error.keyValue)}:${Object.values(error.keyValue)} already exists` })
+    }
+  }
+}
+
 
 export default validate;

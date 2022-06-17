@@ -1,42 +1,27 @@
 import express from 'express';
 import Controller from './controller';
+import { Validate } from './middleware'
 
 
 const router = express.Router();
 
 router.get('/catalogue', Controller.getAll);
 
-// router.get(
-//   '/catalogue/:slug',
-//   CatalogueMiddleware.getCatBySlug,
-//   CatalogueMiddleware.checkCatalogueExists,
-//   ProductController.getPrdctsByCat
-// );
-
 router.post(
   '/catalogue',
-  verifyToken,
-  ValidateCatalogue,
-  checkParentBodyExists,
+  Validate,
   Controller.createOne
 );
 
-// router.patch(
-//   '/catalogue/:id',
-//   UserMiddleware.verifyToken,
-//   CatalogueMiddleware.checkCatalogueExist,
-//   CatalogueMiddleware.checkParentExists,
-//   UserMiddleware.checkRole,
-//   ValidateCatalogue,
-//   CatalogueController.update
-// );
+router.patch(
+  '/catalogue/:id',
+  Validate,
+  Controller.update
+);
 
-// router.delete(
-//   '/catalogue/:id',
-//   UserMiddleware.verifyToken,
-//   CatalogueMiddleware.checkCatalogueExist,
-//   UserMiddleware.checkRole,
-//   CatalogueController.delete
-// );
+router.delete(
+  '/catalogue/:id',
+  Controller.delete
+);
 
 export default router;

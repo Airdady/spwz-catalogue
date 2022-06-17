@@ -15,9 +15,6 @@ const CatalogueSchema = new mongoose.Schema(
       unique: true,
       required: true,
     },
-    icon: {
-      type: String,
-    },
     parent_id: {
       type: Schema.Types.ObjectId,
       ref: "Catalogue",
