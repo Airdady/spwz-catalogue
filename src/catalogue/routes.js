@@ -1,42 +1,32 @@
-import express from 'express';
-import Controller from './controller';
+const express = require('express');
+const Controller = require('./controller');
+const { Validate } = require('./middleware');
 
 
 const router = express.Router();
 
 router.get('/catalogue', Controller.getAll);
 
-// router.get(
-//   '/catalogue/:slug',
-//   CatalogueMiddleware.getCatBySlug,
-//   CatalogueMiddleware.checkCatalogueExists,
-//   ProductController.getPrdctsByCat
-// );
-
 router.post(
   '/catalogue',
-  verifyToken,
-  ValidateCatalogue,
-  checkParentBodyExists,
+  Validate,
   Controller.createOne
 );
 
-// router.patch(
-//   '/catalogue/:id',
-//   UserMiddleware.verifyToken,
-//   CatalogueMiddleware.checkCatalogueExist,
-//   CatalogueMiddleware.checkParentExists,
-//   UserMiddleware.checkRole,
-//   ValidateCatalogue,
-//   CatalogueController.update
-// );
+router.patch(
+  '/catalogue/:id',
+  Validate,
+  Controller.update
+);
 
-// router.delete(
-//   '/catalogue/:id',
-//   UserMiddleware.verifyToken,
-//   CatalogueMiddleware.checkCatalogueExist,
-//   UserMiddleware.checkRole,
-//   CatalogueController.delete
-// );
+router.get(
+  '/catalogue/:id',
+  Controller.getOne
+);
 
-export default router;
+router.delete(
+  '/catalogue/:id',
+  Controller.delete
+);
+
+module.exports = router;
