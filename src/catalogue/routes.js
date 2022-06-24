@@ -1,26 +1,32 @@
 import express from 'express';
-import Controller from './controller';
-import { Validate } from './middleware'
+import Controller from './controller.js';
+import { Validate } from './middleware.js'
 
 
 const router = express.Router();
 
-router.get('/catalogue', Controller.getAll);
+router.get('/',
+  Controller.fetchOrders
+);
 
 router.post(
-  '/catalogue',
-  Validate,
+  '/',
   Controller.createOne
 );
 
 router.patch(
-  '/catalogue/:id',
-  Validate,
+  '/update/:id',
   Controller.update
 );
 
+router.patch(
+  '/update/status/:id',
+  Controller.statusUpdate
+);
+
+
 router.delete(
-  '/catalogue/:id',
+  '/delete/:id',
   Controller.delete
 );
 

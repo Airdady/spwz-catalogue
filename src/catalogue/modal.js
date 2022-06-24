@@ -3,27 +3,61 @@ import mongoosePaginate from 'mongoose-paginate';
 
 const Schema = mongoose.Schema;
 
-const CatalogueSchema = new mongoose.Schema(
+const OrderSchema = new mongoose.Schema(
   {
-    name: {
+    product: [{
+      productId: { type: String, required: true, unique: true },
+      quantity: { type: Number, default: 1 },
+      price: { type: Number }
+    }],
+    userId: {
       type: String,
-      unique: true,
       required: true,
     },
-    slug: {
+    shippingAdressId: {
       type: String,
-      unique: true,
       required: true,
     },
-    parent_id: {
-      type: Schema.Types.ObjectId,
-      ref: "Catalogue",
+    billingAdressId: {
+      type: Number, 
+      required:true
     },
+    paid: {
+      type: Boolean,
+      default:true
+    },
+    status: {
+      type: String,
+      default: "pending",
+    },
+    deliveryType: {
+      type: String
+    },
+    tax: {
+      type: Number,
+      default:500
+    },
+    shippingCost: {
+      type: Number,
+      default: 25000
+    },
+    total: {
+      type: Number
+    },
+    activity: {
+      type: String,
+      default: "Visa"
+    },
+    paymentType: {
+      type: String,
+      default: "Paypal",
+      required:true
+    }
   },
   { timestamps: true }
 );
 
-CatalogueSchema.plugin(mongoosePaginate);
-const Catalogue = mongoose.model("Catalogue", CatalogueSchema);
+OrderSchema.plugin(mongoosePaginate);
+const Order = mongoose.model("Order", OrderSchema);
 
-export default Catalogue;
+export default Order;

@@ -1,12 +1,12 @@
 import express from 'express';
-import Routes from './catalogue/routes';
-import { methodError, serverError } from './util'
-import './db';
+import Routes from './catalogue/routes.js';
+import { methodError, serverError } from './util.js'
+import './db.js';
 const app = express();
 
 app
   .use(express.json())
-  .use('/api/v1/', Routes)
+  .use('/api/orders', Routes)
   .use(methodError)
   .use(serverError);
 
